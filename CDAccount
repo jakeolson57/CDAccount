@@ -1,0 +1,98 @@
+#include <iostream>
+#include <iomanip>
+
+using namespace std;
+
+class CDAccount {
+
+public:
+  CDAccount():
+  CDAccount(double, double, int);
+  double InitialBalance();
+  double BalanceAtMaturity();
+  double InterestRate();
+  double Term();
+  void output(ostream& outs);
+  void input(istream& ins);
+
+private:
+  double balance;
+  double intRate;
+  int term;
+
+};
+
+CDAccount::CDAccount() {
+  balance = 0;
+  intRate = 0;
+  term = 0;
+}
+
+CDAccount::CDAccount(double a, double b, int c) {
+  balance = a;
+  intRate = b;
+  term = c;
+}
+
+int main() {
+  cout.setf(ios::fixed);
+  cout.setf(ios::showpoint);
+  cout.precision(2);
+
+  char dummy;
+
+  CDAccount account = CDAccount (100.0, 10.0, 6);
+
+  cout << "CD Account interest rate: " << account.InterestRate() << "%" << endl;
+  cout << "CD Account initial balance: $" << account.InitialBalance() << endl;
+  cout << "CD Account balance at maturity is: $" << account.BalanceAtMaturity() << endl;
+  cout << "CD Account term is: " << account.Term() << " months" << endl;
+  account.output(cout);
+  cout << "Enter CD initial balance, interest rate, " << "and term:" << endl;
+  account.input(cin);
+  cout << "CD Account interest rate: " << account.InterestRate() << "%" << endl;
+  cout << "CD Account initial balance: $" << account.InitialBalance() << endl;
+  cout << "CD Account balance at maturity is: $" << account.BalanceAtMaturity() << endl;
+  cout << "CD Account term is: " << account.Term() << " months" << endl;
+  account.output(cout);
+  cout << endl;
+
+  cout << "Enter any character and press return to terminate." << endl;
+  cin >> dummy;
+
+  return 0;
+
+}
+
+double CDAccount::InitialBalance() {
+  return balance;
+}
+
+double CDAccount::BalanceAtMaturity() {
+  double newBalance = balance;
+  for (int i = 0; i < Term(); i++) {
+    newBalance = newBalance + ((InterestRate()/100) * newBalance);
+  }
+
+  return newBalance;
+}
+
+double CDAccount::InterestRate() {
+  return intRate;
+}
+
+double CDAccount::Term() {
+  return term;
+}
+
+void CDAccount::output(ostream& outs) {
+  outs.setf(ios::fixed);
+  outs.setf(ios::showpoint);
+  outs.precision(2);
+  outs << "Account balance $" << BalanceAtMaturity() << endl;
+  outs << "InterestRate " << intRate << "%" << endl;
+}
+
+void CDAccount::input(istream& ins) {
+  ins >> balance >> intRate >> term;
+}
